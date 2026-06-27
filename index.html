@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Little World</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="light-mode">
+
+  <!-- Couple Gate -->
+  <div id="coupleGate" class="couple-gate">
+    <div class="couple-gate-card glass">
+      <div class="gate-heart">♡</div>
+      <h1 class="gate-title">Our Little World</h1>
+      <p class="gate-sub">Enter your couple code to open your shared space</p>
+      <input type="text" id="coupleCodeInput" class="form-input gate-input"
+             placeholder="Enter couple code..." autocomplete="off" />
+      <button class="btn btn-primary gate-btn" id="coupleCodeBtn">Open Our World</button>
+      <p class="gate-hint">Both of you use the same code — that's how your entries are shared</p>
+    </div>
+  </div>
+
+  <!-- Animated Background -->
+  <div class="bg-animation" id="bgAnimation"></div>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+    <div class="nav-brand">
+      <span class="nav-heart">♡</span>
+      <span>Our Little World</span>
+    </div>
+  </nav>
+
+  <!-- Sidebar Overlay -->
+  <div class="nav-overlay" id="navOverlay"></div>
+
+  <!-- Sidebar Drawer -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="nav-heart">♡</span>
+      <span class="sidebar-title">Our Little World</span>
+      <button class="sidebar-close" id="sidebarClose">×</button>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home"         class="nav-link active"><span class="nav-icon">🏠</span><span class="nav-label">Home</span></a></li>
+      <li><a href="#journal"      class="nav-link"><span class="nav-icon">📖</span><span class="nav-label">Journal</span></a></li>
+      <li><a href="#gratitude"    class="nav-link"><span class="nav-icon">🌸</span><span class="nav-label">Gratitude</span></a></li>
+      <li><a href="#letters"      class="nav-link"><span class="nav-icon">💌</span><span class="nav-label">Letters</span></a></li>
+      <li><a href="#memories"     class="nav-link"><span class="nav-icon">📸</span><span class="nav-label">Memories</span></a></li>
+      <li><a href="#goals"        class="nav-link"><span class="nav-icon">✅</span><span class="nav-label">Goals</span></a></li>
+      <li><a href="#special-dates" class="nav-link"><span class="nav-icon">📅</span><span class="nav-label">Special Dates</span></a></li>
+      <li><a href="#music"        class="nav-link"><span class="nav-icon">🎵</span><span class="nav-label">Music</span></a></li>
+      <li><a href="#reflection"   class="nav-link"><span class="nav-icon">🌙</span><span class="nav-label">Reflection</span></a></li>
+      <li><a href="#stats"        class="nav-link"><span class="nav-icon">📊</span><span class="nav-label">Stats</span></a></li>
+      <li><a href="#settings"     class="nav-link"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <!-- ======== HOME ======== -->
+    <section id="home" class="section">
+      <div class="home-hero">
+        <h1 class="hero-title">Our Little World</h1>
+        <p class="hero-subtitle">A place to remember the little moments that matter.</p>
+        <div class="home-widgets">
+          <div class="widget glass">
+            <div class="widget-date" id="homeDateDisplay"></div>
+            <div class="widget-clock" id="homeClock"></div>
+          </div>
+          <div class="widget glass together-counter">
+            <div class="counter-label">We've shared</div>
+            <div class="counter-values" id="togetherCounter">
+              <div class="counter-item"><span id="counterDays">0</span><small>Days</small></div>
+              <div class="counter-item"><span id="counterHours">0</span><small>Hours</small></div>
+              <div class="counter-item"><span id="counterMins">0</span><small>Minutes</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="quote-card glass" id="quoteCard">
+          <p class="quote-text" id="quoteText"></p>
+        </div>
+        <div class="daily-question-card glass" id="dailyQuestion">
+          <span class="dq-label">Today's Question</span>
+          <p class="dq-text" id="dqText"></p>
+        </div>
+        <button class="btn btn-inspire" id="inspireBtn">✨ Inspire Us</button>
+        <div class="inspire-msg glass" id="inspireMsg" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- ======== JOURNAL ======== -->
+    <section id="journal" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Daily Journal</h2>
+        <p class="section-sub">Capture how your day unfolded</p>
+      </div>
+      <div class="journal-form glass">
+        <input type="hidden" id="journalEditId" />
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="journalDate" class="form-input" />
+          </div>
+          <div class="form-group mood-group">
+            <label>Mood</label>
+            <div class="mood-selector" id="moodSelector">
+              <button class="mood-btn" data-mood="😊" title="Happy">😊</button>
+              <button class="mood-btn" data-mood="😍" title="Loved">😍</button>
+              <button class="mood-btn" data-mood="😌" title="Peaceful">😌</button>
+              <button class="mood-btn" data-mood="😴" title="Tired">😴</button>
+              <button class="mood-btn" data-mood="😢" title="Sad">😢</button>
+              <button class="mood-btn" data-mood="😡" title="Frustrated">😡</button>
+              <button class="mood-btn" data-mood="❤️" title="Grateful">❤️</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>How was your day?</label>
+          <textarea class="form-input" id="journalDay" placeholder="Tell us about your day..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>What made you smile today?</label>
+          <textarea class="form-input" id="journalSmile" placeholder="A moment, person, or thing..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>What challenged you today?</label>
+          <textarea class="form-input" id="journalChallenge" placeholder="A difficulty you faced..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>What are you grateful for today?</label>
+          <textarea class="form-input" id="journalGrateful" placeholder="Big or small..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Best moment of the day</label>
+          <textarea class="form-input" id="journalBest" placeholder="The highlight..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="journalSaveBtn">Save Entry</button>
+          <button class="btn btn-ghost" id="journalCancelBtn" style="display:none;">Cancel</button>
+        </div>
+      </div>
+      <div class="journal-controls">
+        <input type="text" class="search-input" id="journalSearch" placeholder="Search entries..." />
+        <input type="date" class="form-input date-filter" id="journalDateFilter" />
+        <button class="btn btn-ghost" id="journalClearFilter">Clear</button>
+      </div>
+      <div class="cards-grid" id="journalCards"></div>
+    </section>
+
+    <!-- ======== GRATITUDE ======== -->
+    <section id="gratitude" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Gratitude Journal</h2>
+        <p class="section-sub">Today I'm grateful for...</p>
+      </div>
+      <div class="gratitude-form glass">
+        <input type="hidden" id="gratEditId" />
+        <div class="form-group">
+          <textarea class="form-input" id="gratText" placeholder="I'm grateful for..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="gratSaveBtn">Add Note</button>
+        </div>
+      </div>
+      <div class="sticky-wall" id="stickyWall"></div>
+    </section>
+
+    <!-- ======== LETTERS ======== -->
+    <section id="letters" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Letters</h2>
+        <p class="section-sub">Words written with love</p>
+      </div>
+      <div class="letter-form glass">
+        <input type="hidden" id="letterEditId" />
+        <div class="form-row">
+          <div class="form-group">
+            <label>From</label>
+            <input type="text" class="form-input" id="letterFrom" placeholder="Your name..." />
+          </div>
+          <div class="form-group">
+            <label>To</label>
+            <input type="text" class="form-input" id="letterTo" placeholder="Their name..." />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" class="form-input" id="letterTitle" placeholder="Letter title..." />
+        </div>
+        <div class="form-group">
+          <label>Letter</label>
+          <textarea class="form-input letter-body" id="letterBody" placeholder="Dear..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="letterSaveBtn">Send Letter</button>
+          <button class="btn btn-ghost" id="letterCancelBtn" style="display:none;">Cancel</button>
+        </div>
+      </div>
+      <div class="cards-grid" id="letterCards"></div>
+    </section>
+
+    <!-- ======== MEMORIES ======== -->
+    <section id="memories" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Memory Gallery</h2>
+        <p class="section-sub">A collection of our beautiful moments</p>
+      </div>
+      <div class="memory-form glass">
+        <input type="hidden" id="memEditId" />
+        <div class="form-group">
+          <label>Photo</label>
+          <div class="file-upload-area" id="fileUploadArea">
+            <input type="file" id="memPhoto" accept="image/*" class="file-input" />
+            <div class="file-upload-label">
+              <span class="upload-icon">📷</span>
+              <span>Click or drag to upload a photo</span>
+            </div>
+            <img id="memPreview" class="mem-preview" style="display:none;" alt="Preview" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Caption</label>
+            <input type="text" class="form-input" id="memCaption" placeholder="A caption for this memory..." />
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" class="form-input" id="memDate" />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="memSaveBtn">Save Memory</button>
+          <button class="btn btn-ghost" id="memCancelBtn" style="display:none;">Cancel</button>
+        </div>
+      </div>
+      <div class="memory-gallery" id="memoryGallery"></div>
+    </section>
+
+    <!-- ======== GOALS ======== -->
+    <section id="goals" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Couple Goals</h2>
+        <p class="section-sub">Dreams we're chasing together</p>
+      </div>
+      <div class="goals-form glass">
+        <div class="form-group">
+          <input type="text" class="form-input" id="goalInput" placeholder="Add a new goal..." />
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="goalAddBtn">Add Goal</button>
+        </div>
+      </div>
+      <div class="goals-list" id="goalsList"></div>
+    </section>
+
+    <!-- ======== SPECIAL DATES ======== -->
+    <section id="special-dates" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Special Dates</h2>
+        <p class="section-sub">Moments worth counting down to</p>
+      </div>
+      <div class="dates-form glass">
+        <input type="hidden" id="dateEditId" />
+        <div class="form-row">
+          <div class="form-group">
+            <label>Label</label>
+            <input type="text" class="form-input" id="dateLabel" placeholder="Anniversary, Birthday..." />
+          </div>
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" class="form-input" id="dateValue" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select class="form-input" id="dateCategory">
+            <option value="anniversary">Anniversary</option>
+            <option value="birthday">Birthday</option>
+            <option value="vacation">Vacation</option>
+            <option value="milestone">Milestone</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="dateSaveBtn">Save Date</button>
+          <button class="btn btn-ghost" id="dateCancelBtn" style="display:none;">Cancel</button>
+        </div>
+      </div>
+      <div class="dates-grid" id="datesGrid"></div>
+    </section>
+
+    <!-- ======== MUSIC ======== -->
+    <section id="music" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Music Corner</h2>
+        <p class="section-sub">Songs that color our days</p>
+      </div>
+      <div class="music-form glass">
+        <div class="form-row">
+          <div class="form-group">
+            <label>YouTube or Spotify Link</label>
+            <input type="url" class="form-input" id="musicUrl" placeholder="https://youtube.com/watch?v=... or https://open.spotify.com/track/..." />
+          </div>
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" class="form-input" id="musicTitle" placeholder="Song title..." />
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="musicAddBtn">Add to Playlist</button>
+        </div>
+      </div>
+      <div class="music-playlist" id="musicPlaylist"></div>
+    </section>
+
+    <!-- ======== REFLECTION ======== -->
+    <section id="reflection" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Night Reflection</h2>
+        <p class="section-sub">End your day with intention</p>
+      </div>
+      <div class="reflection-form glass">
+        <input type="hidden" id="reflEditId" />
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" class="form-input" id="reflDate" />
+        </div>
+        <div class="form-group">
+          <label>What did I learn today?</label>
+          <textarea class="form-input" id="reflLearn" placeholder="A lesson, insight, or realization..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>What am I looking forward to tomorrow?</label>
+          <textarea class="form-input" id="reflTomorrow" placeholder="Something to anticipate..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Is there anything I want to remember from today?</label>
+          <textarea class="form-input" id="reflRemember" placeholder="A detail worth keeping..."></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-primary" id="reflSaveBtn">Save Reflection</button>
+          <button class="btn btn-ghost" id="reflCancelBtn" style="display:none;">Cancel</button>
+        </div>
+      </div>
+      <div class="cards-grid" id="reflCards"></div>
+    </section>
+
+    <!-- ======== STATS ======== -->
+    <section id="stats" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Our Story in Numbers</h2>
+        <p class="section-sub">A glimpse at how far we've come</p>
+      </div>
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card glass" data-stat="journals">
+          <div class="stat-icon">📖</div>
+          <div class="stat-value" id="statJournals">0</div>
+          <div class="stat-label">Journal Entries</div>
+        </div>
+        <div class="stat-card glass" data-stat="gratitude">
+          <div class="stat-icon">🌸</div>
+          <div class="stat-value" id="statGratitude">0</div>
+          <div class="stat-label">Gratitude Notes</div>
+        </div>
+        <div class="stat-card glass" data-stat="letters">
+          <div class="stat-icon">💌</div>
+          <div class="stat-value" id="statLetters">0</div>
+          <div class="stat-label">Letters Written</div>
+        </div>
+        <div class="stat-card glass" data-stat="memories">
+          <div class="stat-icon">📸</div>
+          <div class="stat-value" id="statMemories">0</div>
+          <div class="stat-label">Memories Saved</div>
+        </div>
+        <div class="stat-card glass" data-stat="goals">
+          <div class="stat-icon">✅</div>
+          <div class="stat-value" id="statGoals">0</div>
+          <div class="stat-label">Goals Completed</div>
+        </div>
+        <div class="stat-card glass" data-stat="streak">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-value" id="statStreak">0</div>
+          <div class="stat-label">Day Writing Streak</div>
+        </div>
+        <div class="stat-card glass" data-stat="together">
+          <div class="stat-icon">❤️</div>
+          <div class="stat-value" id="statTogether">0</div>
+          <div class="stat-label">Days Together</div>
+        </div>
+        <div class="stat-card glass" data-stat="reflections">
+          <div class="stat-icon">🌙</div>
+          <div class="stat-value" id="statReflections">0</div>
+          <div class="stat-label">Night Reflections</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== SETTINGS ======== -->
+    <section id="settings" class="section">
+      <div class="section-header">
+        <h2 class="section-title">Settings</h2>
+        <p class="section-sub">Make this space yours</p>
+      </div>
+      <div class="settings-grid">
+
+        <div class="settings-card glass">
+          <h3 class="settings-group-title">Appearance</h3>
+          <div class="setting-row">
+            <span>Dark Mode</span>
+            <label class="toggle">
+              <input type="checkbox" id="darkModeToggle" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <span>Accent Color</span>
+            <div class="color-swatches" id="colorSwatches">
+              <button class="swatch" data-color="dusty-pink" style="background:#d4a5b5;" title="Dusty Pink"></button>
+              <button class="swatch" data-color="sage-green" style="background:#8aab8a;" title="Sage Green"></button>
+              <button class="swatch" data-color="lavender" style="background:#9b87b5;" title="Lavender"></button>
+              <button class="swatch" data-color="sky-blue" style="background:#87b5c4;" title="Sky Blue"></button>
+              <button class="swatch" data-color="warm-peach" style="background:#e8b89a;" title="Warm Peach"></button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <span>Font Family</span>
+            <select class="form-input" id="fontSelect">
+              <option value="Georgia, serif">Georgia</option>
+              <option value="'Palatino Linotype', serif">Palatino</option>
+              <option value="'Trebuchet MS', sans-serif">Trebuchet</option>
+              <option value="Verdana, sans-serif">Verdana</option>
+              <option value="'Courier New', monospace">Courier</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-card glass">
+          <h3 class="settings-group-title">Our Story</h3>
+          <div class="setting-row column">
+            <label>Start Date (Together Since)</label>
+            <input type="date" class="form-input" id="startDateInput" />
+          </div>
+        </div>
+
+        <div class="settings-card glass">
+          <h3 class="settings-group-title">Background</h3>
+          <div class="setting-row column">
+            <label>Background Image</label>
+            <input type="file" class="form-input" id="bgImageInput" accept="image/*" />
+            <button class="btn btn-ghost" id="clearBgBtn" style="margin-top:0.5rem;">Clear Background</button>
+          </div>
+          <div class="setting-row column">
+            <label>Animation Style</label>
+            <select class="form-input" id="animSelect">
+              <option value="circles">Floating Circles</option>
+              <option value="hearts">Floating Hearts</option>
+              <option value="stars">Floating Stars</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="settings-card glass">
+          <h3 class="settings-group-title">Shared Space</h3>
+          <div class="setting-row">
+            <span>Couple Code</span>
+            <strong id="coupleCodeDisplay" style="color:var(--accent); letter-spacing:0.05em;"></strong>
+          </div>
+          <div class="setting-row">
+            <span>Switch to a different couple code</span>
+            <button class="btn btn-ghost" id="changeCoupleBtn">Change</button>
+          </div>
+        </div>
+
+        <div class="settings-card glass">
+          <h3 class="settings-group-title">Data</h3>
+          <div class="data-buttons">
+            <button class="btn btn-primary" id="exportBtn">📥 Export Data</button>
+            <label class="btn btn-ghost" style="cursor:pointer;">
+              📤 Import Data
+              <input type="file" id="importFile" accept=".json" style="display:none;" />
+            </label>
+            <button class="btn btn-danger" id="clearAllBtn">🗑 Clear All Data</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- ======== FOOTER ======== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-heart">♡</span> Our Little World
+      </div>
+      <p class="footer-tagline">A shared space for memories, reflections, and everyday moments.</p>
+      <p class="footer-made">Made with care · Every day is worth remembering.</p>
+    </div>
+  </footer>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Modal for viewing entries -->
+  <div class="modal-overlay" id="modalOverlay" style="display:none;">
+    <div class="modal glass" id="modal">
+      <button class="modal-close" id="modalClose">×</button>
+      <div class="modal-content" id="modalContent"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
