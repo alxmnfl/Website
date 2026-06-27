@@ -1326,6 +1326,7 @@ async function startApp() {
   initSettings();
   updateStats();
   subscribeRealtime();
+  lucide.createIcons();
 
   window.viewJournal      = viewJournal;
   window.editJournal      = editJournal;
