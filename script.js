@@ -854,7 +854,7 @@ function renderMusic() {
     return;
   }
   playlist.innerHTML = list.map(s => {
-    let embedHtml;
+    let embedHtml, badge;
     if (s.type === 'spotify') {
       const height = s.spType === 'track' ? '152' : '352';
       embedHtml = `<iframe class="music-embed spotify-embed"
@@ -862,18 +862,21 @@ function renderMusic() {
         height="${height}" frameborder="0"
         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
         loading="lazy" title="${esc(s.title)}"></iframe>`;
+      badge = `<span class="music-badge music-badge-spotify">&#9679; Spotify</span>`;
     } else {
       embedHtml = `<iframe class="music-embed"
         src="https://www.youtube.com/embed/${s.vid}"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen title="${esc(s.title)}"></iframe>`;
+      badge = `<span class="music-badge music-badge-youtube">&#9679; YouTube</span>`;
     }
     return `
     <div class="music-card">
       ${embedHtml}
       <div class="music-info">
+        ${badge}
         <span class="music-title">${esc(s.title)}</span>
-        <button class="music-del" onclick="deleteMusic('${s.id}')" title="Remove">🗑</button>
+        <button class="music-del" onclick="deleteMusic('${s.id}')" title="Remove">✕</button>
       </div>
     </div>`;
   }).join('');
